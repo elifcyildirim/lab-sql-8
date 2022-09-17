@@ -37,8 +37,14 @@ ORDER BY AVG(f.length) DESC
 LIMIT 3;
 
 -- q4 Display the most frequently rented movies in descending order.
-
--- I NEED TO FIGURE OUT THE WAYS TO WORK WITH DATES IN SQL. 
+SELECT count(f.film_id) AS "rental frequency", f.title
+FROM film f
+JOIN inventory i
+USING (film_id)
+JOIN rental r
+USING (inventory_id)
+GROUP BY f.title
+ORDER BY count(f.film_id) DESC;
 
 -- q5 List the top five genres in gross revenue in descending order.
 
@@ -73,10 +79,10 @@ WHERE i.film_id=1 AND i.store_id=1 AND return_date is null ;
 
 -- q7 Get all pairs of actors that worked together. 
 
-SELECT fa1.film_id, fa1.actor_id, fa2.actor_id -- HOW DO I GET RID OF THE DUPLICATE ROWS IN THE RESULT (e.g. Pair A-B and B-A appears in the seach although only A-B would be enough)?
+SELECT fa1.film_id, fa1.actor_id, fa2.actor_id
 FROM film_actor fa1
 JOIN film_actor fa2
-ON (fa1.actor_id <> fa2.actor_id) AND (fa1.film_id = fa2.film_id);
+ON (fa1.actor_id < fa2.actor_id) AND (fa1.film_id = fa2.film_id);
 
 -- q8 Get all pairs of customers that have rented the same film more than 3 times.
 
